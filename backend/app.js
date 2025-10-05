@@ -1,12 +1,15 @@
 const express = require("express");
 const cors = require("cors");
 const db = require("./DB/DB_CONNECTION");
-
 const app = express();
+require('./models/productModel');
 
 app.use(express.json());
 app.use(cors());
 
+
+const productRoute = require('./routes/productsRoutes');
+app.use('/api',productRoute);
 
 //Setup connection
 
