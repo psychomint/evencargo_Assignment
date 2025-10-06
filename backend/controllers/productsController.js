@@ -8,7 +8,7 @@ const addProduct = async (req,res) => {
         const {productName, productDescription, productPrice} = req.body;
         // check missing fields
         if(!productName || !productDescription || !productPrice){
-            return res.status(404).send({message: "Require all fields"});
+            return res.status(400).send({message: "Require all fields"});
         }
         const productInfo = await productModel.create({
             productName,
@@ -31,7 +31,7 @@ const addProduct = async (req,res) => {
 }
 
 const removeProduct = async (req,res) => {
-    const t = sequelize.transaction();
+    const t = await sequelize.transaction();
     try{
         const {id} = req.params;
         
@@ -43,7 +43,7 @@ const removeProduct = async (req,res) => {
         { transaction: t }
     );
         console.log("productController", "removeProduct", updatedRows);
-        if(updatedRows === 0) return res.status(400).json({message:"product Not Found"});
+        if(updatedRows === 0) return res.status(404).json({message:"product Not Found"});
         (await t).commit();
         res.status(200).json({message:"Product deleted", updatedRows})
     }
@@ -57,11 +57,11 @@ const removeProduct = async (req,res) => {
 
 const getAllProducts = async (req,res) => {
     try{
-        const allProcductsData = await productModel.findAll({});
-        if(allProcductsData.length === 0){
+        const allProductsData = await productModel.findAll({});
+        if(allProductsData.length === 0){
             return res.status(200).json({message : 'You have not any products'})
         }
-        res.status(200).json({message:"done",allProcductsData});
+        res.status(200).json({message:"done",allProductsData});
 
     }
     catch(err){
