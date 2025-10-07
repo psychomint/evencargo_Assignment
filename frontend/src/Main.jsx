@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import ProductForm from './components/ProductForm'
 import ViewProducts from './components/ViewProducts'
 import axios from 'axios';
+import ShimmerCard from './components/ShimmerCard';
 
 export const Main = () => {
     const [allProductsData, setAllProductsData] = useState([]);
@@ -27,13 +28,18 @@ export const Main = () => {
   return (
     <>
     <div className="flex flex-col md:flex-row gap-6 p-6 bg-gray-50 min-h-screen">
-    
         <div className="flex-1 rounded-2xl shadow-md bg-white p-5 transition-all hover:shadow-lg">
-            <ViewProducts
-            allProductsData={allProductsData}
-            onDelete={handleProductDeleted}
-            />
-        </div>
+            {allProductsData.length === 0 ? (
+                Array.from({ length: 6 }).map((_, index) => (
+                    <ShimmerCard key={index} />
+                    ))
+            ) : (
+                <ViewProducts
+                allProductsData={allProductsData}
+                onDelete={handleProductDeleted}
+                />
+            )}
+            </div>
 
     
         <div className="w-full md:w-1/3 rounded-2xl shadow-md bg-white p-5 transition-all hover:shadow-lg">
